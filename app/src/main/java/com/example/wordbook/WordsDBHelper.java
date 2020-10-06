@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class WordsDBHelper extends SQLiteOpenHelper {
-    private final static String DATABASE_NAME = "wordsdb";//数据库名字
+    private final static String DATABASE_NAME = "wordqxr";//数据库名字
     private final static int DATABASE_VERSION = 1;//数据库版本
 
     /**
