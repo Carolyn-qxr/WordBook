@@ -25,30 +25,40 @@ import java.util.Map;
 public class WordItemFragment extends ListFragment {
 
     private static final String TAG = "myTag";
-
-
     //当前是否为横屏
     private boolean currentIsLand;
-
-
     private OnFragmentInteractionListener mListener;
 
     // TODO: Rename and change types of parameters
+    //创建fragment实例
     public static WordItemFragment newInstance() {
         WordItemFragment fragment = new WordItemFragment();
         Bundle args = new Bundle();
-        ;
         fragment.setArguments(args);
         return fragment;
     }
+    //当Activity与Fragment发生关联时调用
+    @Override
+    public void onAttach(Context context) {
+        Log.v(TAG, "WordItemFragment::onAttach");
+        super.onAttach(context);
+        mListener = (OnFragmentInteractionListener) getActivity();
+        //与、activity互传数据
 
+    }
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //刷新单词列表
+        refreshWordsList();
+    }
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
     public WordItemFragment() {
     }
-
+    //创建该Fragment的视图
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -60,15 +70,6 @@ public class WordItemFragment extends ListFragment {
         //fragment点击事件
         return view;
     }
-
-    @Override
-    public void onAttach(Context context) {
-        Log.v(TAG, "WordItemFragment::onAttach");
-        super.onAttach(context);
-        mListener = (OnFragmentInteractionListener) getActivity();
-
-    }
-
     //更新单词列表，从数据库中找到所有单词，然后在列表中显示出来
     public void refreshWordsList() {
         WordsDB wordsDB= WordsDB.getWordsDB();
@@ -82,47 +83,41 @@ public class WordItemFragment extends ListFragment {
         }
     }
 
-    //更新单词列表，从数据库中找到同strWord向匹配的单词，然后在列表中显示出来
+    //查找模式:更新单词列表，从数据库中找到同strWord向匹配的单词，然后在列表中显示出来
     public void refreshWordsList(String strWord) {
         WordsDB wordsDB= WordsDB.getWordsDB();
         if (wordsDB != null) {
             ArrayList<Map<String, String>> items = wordsDB.Search(strWord);
             if(items.size()>0){
-
                 SimpleAdapter adapter = new SimpleAdapter(getActivity(), items, R.layout.item,
                         new String[]{Words.Word._ID, Words.Word.COLUMN_NAME_WORD},
                         new int[]{R.id.textId, R.id.textViewWord});
-
                 setListAdapter(adapter);
             }else{
                 Toast.makeText(getActivity(),"Not found",Toast.LENGTH_LONG).show();
             }
         }
     }
-
-
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        //刷新单词列表
-        refreshWordsList();
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        Log.v(TAG, "WordItemFragment::onCreateContextMenu()");
+        super.onCreateContextMenu(menu, v, menuInfo);
+        getActivity().getMenuInflater().inflate(R.menu.contextmenu, menu);
     }
-
-
+    //菜单触发事件
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         TextView textId = null;
         TextView textWord = null;
         TextView textMeaning = null;
         TextView textSample = null;
-
         AdapterView.AdapterContextMenuInfo info = null;
         View itemView = null;
 
         switch (item.getItemId()) {
             case R.id.delete:
                 //删除单词
+                //可以得到当前长按的是哪一个item
                 info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
                 itemView = info.targetView;
                 textId = (TextView) itemView.findViewById(R.id.textId);
@@ -139,7 +134,6 @@ public class WordItemFragment extends ListFragment {
 
                 if (textId != null) {
                     String strId = textId.getText().toString();
-
                     mListener.onUpdateDialog(strId);
                 }
                 break;
@@ -147,27 +141,20 @@ public class WordItemFragment extends ListFragment {
         return true;
     }
 
-
+//　与onAttach()相对应，当Fragment与Activity的关联被取消时调用
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
     }
-
     /**
      *创建点击以后显示的布局条目
      */
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        Log.v(TAG, "WordItemFragment::onCreateContextMenu()");
-        super.onCreateContextMenu(menu, v, menuInfo);
-        getActivity().getMenuInflater().inflate(R.menu.contextmenu, menu);
-    }
+
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-
         if (null != mListener) {
             //通知Fragment所在的Activity，用户单击了列表的position项
             TextView textView = (TextView) v.findViewById(R.id.textId);
@@ -183,11 +170,7 @@ public class WordItemFragment extends ListFragment {
      */
     public interface OnFragmentInteractionListener {
         public void onWordItemClick(String id);
-
-
-
         public void onDeleteDialog(String strId);
-
         public void onUpdateDialog(String strId);
     }
 }
