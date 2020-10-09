@@ -16,7 +16,7 @@
         android:theme="@style/AppTheme">
         <provider
             android:name=".WordsProvider"
-            android:authorities="cn.edu.bistu.cs.se.wordsprovider"
+            android:authorities="com.example.wordbook.WordsProvider"
             android:enabled="true"
             android:exported="true"></provider>
 
@@ -29,7 +29,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".WordDetailActivity"></activity>
+        <activity android:name=".WordDetailActivity" />
     </application>
 
 </manifest>

@@ -52,10 +52,8 @@ public class MainActivity extends AppCompatActivity implements WordItemFragment.
         return true;
     }
 
-
     public boolean onOptionsItemSelected(MenuItem item){
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         switch (id) {
             case R.id.add:
@@ -67,37 +65,8 @@ public class MainActivity extends AppCompatActivity implements WordItemFragment.
                 SearchDialog();
                 return true;
         }
-
-
         return super.onOptionsItemSelected(item);
     }
-
-    private void InsertDialogURI() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        final View viewDialog = LayoutInflater.from(MainActivity.this).inflate(R.layout.adddialog, null, false);
-        builder.setTitle("添加单词").setView(viewDialog)
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        EditText word=(EditText) viewDialog.findViewById(R.id.addWord);
-                        EditText meaning=(EditText) viewDialog.findViewById(R.id.addMeaning);
-                        EditText sample=(EditText) viewDialog.findViewById(R.id.addSample);
-                        ContentValues values = new ContentValues();
-                        values.put(Words.Word.COLUMN_NAME_WORD, word.getText().toString());
-                        values.put(Words.Word.COLUMN_NAME_MEANING, meaning.getText().toString());
-                        values.put(Words.Word.COLUMN_NAME_SAMPLE, sample.getText().toString());
-                        Uri newUri = resolver.insert(Words.Word.CONTENT_URI, values);
-                        Toast.makeText(MainActivity.this,newUri.toString(),Toast.LENGTH_LONG).show();
-                    }
-                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-            }
-        });
-        builder.create().show();
-    }
-
-
     private void InsertDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         final View viewDialog = LayoutInflater.from(MainActivity.this).inflate(R.layout.adddialog, null, false);
@@ -121,9 +90,6 @@ public class MainActivity extends AppCompatActivity implements WordItemFragment.
         });
         builder.create().show();
     }
-
-
-
     private void SearchDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         final View viewDialog = LayoutInflater.from(MainActivity.this).inflate(R.layout.searchdialog, null, false);
@@ -141,11 +107,10 @@ public class MainActivity extends AppCompatActivity implements WordItemFragment.
         });
         builder.create().show();
 
-
-
     }
 
     private void RefreshWordItemFragment() {
+
         wordItemFragment.refreshWordsList();
     }
     private void RefreshWordItemFragment(String strWord) {
@@ -166,8 +131,6 @@ public class MainActivity extends AppCompatActivity implements WordItemFragment.
             intent.putExtra(WordDetailFragment.ARG_ID, id);
             startActivity(intent);
         }
-
-
     }
 
     private void ChangeWordDetailFragment(String id) {

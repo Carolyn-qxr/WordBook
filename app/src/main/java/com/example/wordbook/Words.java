@@ -34,7 +34,8 @@ public class Words {
         }
     }
 
-    public static final String AUTHORITY = "cn.edu.bistu.cs.se.wordsprovider";//URI授权者
+    public static final String AUTHORITY = "com.example.wordbook.WordsProvider";//URI授权者
+
 
     public Words() {
     }
@@ -48,7 +49,7 @@ public class Words {
         //MIME类型
         public static final String MIME_DIR_PREFIX = "vnd.android.cursor.dir";
         public static final String MIME_ITEM_PREFIX = "vnd.android.cursor.item";
-        public static final String MINE_ITEM = "vnd.bistu.cs.se.word";
+        public static final String MINE_ITEM = "vnd.com.example.wordbook.word";
 
         public static final String MINE_TYPE_SINGLE = MIME_ITEM_PREFIX + "/" + MINE_ITEM;
         public static final String MINE_TYPE_MULTIPLE = MIME_DIR_PREFIX + "/" + MINE_ITEM;
